@@ -1,0 +1,38 @@
+// 33. Search in Rotated Sorted Array
+// Suppose a sorted array is rotated at some pivot unknown to you beforehand.
+
+// (i.e., 0 1 2 4 5 6 7 might become 4 5 6 7 0 1 2).
+
+// You are given a target value to search. If found in the array return its index, otherwise return -1.
+
+// You may assume no duplicate exists in the array.
+
+class Solution {//画图理解
+public:
+    int search(vector<int>& nums, int target) {
+        if(nums.empty())
+            return -1;
+		int begin=0;
+        int end=nums.size()-1;
+		while(begin<=end){
+			int mid=begin+(end-begin)/2;//注意！
+			if(target==nums[mid])
+				return mid;
+			if(nums[mid]>=nums[begin]){//mid在前半个数组里
+				if(target>=nums[begin] && target<nums[mid])//考虑target相对于begin mid end的位置
+					end=mid-1;
+				else
+					begin=mid+1;
+			}
+			else{//mid在前后个数组里
+				if(target>nums[mid] && target<=nums[end])//考虑target相对于begin mid end的位置
+					begin=mid+1;
+				else
+					end=mid-1;
+			}
+		}
+		return -1;
+    }
+};
+
+
