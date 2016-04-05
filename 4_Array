@@ -1,3 +1,7 @@
+//4. Median of Two Sorted Arrays
+//There are two sorted arrays nums1 and nums2 of size m and n respectively. Find the median of the two sorted arrays. 
+//The overall run time complexity should be O(log (m+n)).
+
 To solve this problem, we need to understand "What is the use of median". In statistics, the median is used for dividing a set into two equal length subsets, that one subset is always greater than the other. If we understand the use of median for dividing, we are very close to the answer.
 
 First let's cut A into two parts at a random position i:
