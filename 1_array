@@ -1,0 +1,40 @@
+	/*1. Two Sum
+	Given an array of integers, return indices of the two numbers such that they add up to a specific target.
+	You may assume that each input would have exactly one solution.
+	Example:
+	Given nums = [2, 7, 11, 15], target = 9,
+	Because nums[0] + nums[1] = 2 + 7 = 9,
+	return[0, 1].*/
+	
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+		vector<int>index;
+		if (nums.empty())
+			return index;
+		vector<int>copy_nums = nums;
+		sort(copy_nums.begin(), copy_nums.end());
+		vector<int>::size_type begin = 0;
+		vector<int>::size_type end = copy_nums.size() - 1;
+		while (begin<end) {
+			if (copy_nums[begin] + copy_nums[end] == target)
+				break;
+			else if (copy_nums[begin] + copy_nums[end]>target)
+				--end;
+			else
+				++begin;
+		}
+		int firstNum = copy_nums[begin];
+		int secondNum = copy_nums[end];
+
+		vector<int>::iterator itr1 = find(nums.begin(), nums.end(), firstNum);
+		*itr1 = 0x7fffffff;//考虑到如果有两个相同的数字之和真好满足条件，但是find函数总是返回第一个找到的结果
+		                   //所以可以修改找到的第一个结果，以免影响第二次find
+		vector<int>::iterator itr2 = find(nums.begin(), nums.end(), secondNum);
+
+		index.push_back(itr1 - nums.begin());//题目假设是总是能找到，所以就没有对没有找到的情况进行判断
+		index.push_back(itr2 - nums.begin());
+
+		return index;
+	}
+};
