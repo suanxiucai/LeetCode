@@ -1,0 +1,47 @@
+//Given an array and a value, remove all instances of that value in place and return the new length.
+//
+//Do not allocate extra space for another array, you must do this in place with constant memory.
+//
+//The order of elements can be changed.It doesn't matter what you leave beyond the new length.
+//
+//Example:
+//Given input array nums = [3, 2, 2, 3], val = 3
+//
+//Your function should return length = 2, with the first two elements of nums being 2.
+//
+//Hint :
+//
+//	Try two pointers.
+//	Did you use the property of "the order of elements can be changed" ?
+//	What happens when the elements to remove are rare ?
+//主要思想是先排序，那么值为val的部分肯定集中在一段范围内
+//用first找到这个范围的起点，second找到终点，然后对于second之后的部分就一个一个的向前复制(注意，不是交换)
+int removeElement(vector<int>& nums, int val) {
+	int result = 0;
+	if (nums.empty())
+		return result;
+	sort(nums.begin(), nums.end());
+	int first = 0;
+	int count = 0;//用于记录含有val的个数
+	while (first <=(nums.size() - 1)) {
+		if (nums[first] == val) {
+			count++;
+			int second = first + 1;
+			while (second<nums.size() && nums[second] == nums[first]) {//跳过全是val的这一段
+				second++;
+				count++;
+			}
+			while (second <= nums.size() - 1)//把这一段之后的部分逐个复制到前面
+			{
+				nums[first] = nums[second];
+				first++;
+				second++;
+			}
+			break;
+		}
+		else
+			first++;
+	}
+	result = nums.size() - count ;
+	return result;
+}
