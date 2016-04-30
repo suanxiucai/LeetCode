@@ -1,0 +1,77 @@
+//Given an array S of n integers, 
+//find three integers in S such that the sum is closest to a given number,
+//target.Return the sum of the three integers.You may assume that each input would have exactly one solution.
+//
+//For example, given array S = { -1 2 1 - 4 }, and target = 1.
+//
+//The sum that is closest to the target is 2. (-1 + 2 + 1 = 2).
+
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+using namespace std;
+
+//与3sum问题的区别就是，增加一个diff记录差值
+//思想是先排序，然后按顺序取一个值作为a，然后再在a之后的头和尾找b和c
+int threeSumClosest(vector<int>& nums, int target) {
+	int result = 0;
+	if (nums.size() < 3)
+		return result;
+	sort(nums.begin(), nums.end());
+	vector<int>::iterator itr = nums.begin();
+	int diff = INT32_MAX;//开始时设为最大值
+	vector<int>temp;
+	while (itr < nums.end() - 1) {
+		int NewTarget = target - *itr;
+		vector<int>::iterator first_itr = itr + 1;
+		vector<int>::iterator last_itr = nums.end() - 1;
+		while (first_itr < last_itr) {
+			if (*first_itr + *last_itr == NewTarget) {
+				diff = 0;
+				vector<int>().swap(temp);//答案需要的是值的和而不是diff，所以要记录相应的值
+				temp.push_back(*itr);
+				temp.push_back(*first_itr);
+				temp.push_back(*last_itr);
+				break;//因为最小值肯定是0，并且题目说只有一组结果，所以一旦找到就跳出
+			}
+			else if (*first_itr + *last_itr < NewTarget) {
+				if (diff > (abs(NewTarget - *first_itr - *last_itr))) {//更新diff
+					diff = (abs(NewTarget - *first_itr - *last_itr));
+					vector<int>().swap(temp);
+					temp.push_back(*itr);
+					temp.push_back(*first_itr);
+					temp.push_back(*last_itr);
+				}
+				first_itr++;
+			}
+			else {
+				if (diff > (abs(NewTarget - *first_itr - *last_itr))) {//更新diff
+					diff = (abs(NewTarget - *first_itr - *last_itr));
+					vector<int>().swap(temp);
+					temp.push_back(*itr);
+					temp.push_back(*first_itr);
+					temp.push_back(*last_itr);
+				}
+				last_itr--;
+			}
+		}
+		while (itr != nums.end() - 1 && *(itr + 1) == *itr)//跳过重复的值
+			itr++;
+		itr++;
+	}
+	result =accumulate(temp.begin(),temp.end(),0);//注意用法，头文件为numeric，函数的第三个参数为计算的起始值。
+	return result;
+}
+
+
+
+
+void main() {
+	vector<int>a = { 0,0,0};
+	int t = 1;
+	int b;
+	b= threeSumClosest(a, t);
+	cin.get();
+}
