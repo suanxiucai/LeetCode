@@ -1,0 +1,72 @@
+//The set[1, 2, 3, …, n] contains a total of n!unique permutations.
+//
+//By listing and labeling all of the permutations in order,
+//We get the following sequence(ie, for n = 3) :
+//
+//	"123"
+//	"132"
+//	"213"
+//	"231"
+//	"312"
+//	"321"
+//	Given n and k, return the kth permutation sequence.
+//	Note: Given n will be between 1 and 9 inclusive.
+//我们以n = 4，k = 17为例，数组src = [1, 2, 3, ..., n]。
+//第17个排列的第一个数是什么呢：
+//我们知道以某个数固定开头的排列个数 = (n - 1)!= 3!= 6, 即以1和2开头的排列总共6 * 2 = 12个，12 < 17, 
+//因此第17个排列的第一个数不可能是1或者2，6 * 3 > 17, 因此第17个排列的第一个数是3。
+//即第17个排列的第一个数是原数组（原数组递增有序）的第m = upper(17 / 6) = 3（upper表示向上取整）个数。    
+//第一个数固定后，我们从src数组中删除该数，那么就相当于在当前src的基础上求第k - (m - 1)*(n - 1)!= 17 - 2 * 6 = 5个排列，
+//因此可以递归的求解该问题。
+
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+double Factorial(int k) {//计算n的阶乘
+	double result=1;
+	for (int i = 1; i <= k; i++)
+		result *=i;
+	return result;
+}
+string getPermutation(int n, int k) {
+	vector<int>buff;
+	vector<int>result;
+	string str;
+	const int s_n = n;
+	bool FirstTime = true;//目的是只计算一次阶乘  以后n-1的阶乘可以通过n的阶乘得到
+	double temp;
+	for (int i = 1; i <= n; i++)
+		buff.push_back(i);//存入备选数字1 2 3 4 ...n
+	while (result.size()<s_n)
+	{
+		if (FirstTime)//如果是第一次 就计算一下阶乘
+		{
+			temp = Factorial(n - 1);  
+			FirstTime = false;
+		}
+		else {//如果不是第一次 就使用之前计算的阶乘进行计算
+			temp = temp /n;
+		}
+		int num = ceil(k / temp);//ceil是向上取整运算  头文件为numeric  把temp定义为double是为了进行double运算 而后向上取整
+		result.push_back(buff[num - 1]);//将第num个（从0开始）数存进结果
+		buff.erase(buff.begin() + num - 1);//将用过的数从备选集合中删除
+		k = k - (num - 1)*temp;//为迭代做准备
+		n--;
+	}
+	for (vector<int>::iterator i = result.begin(); i != result.end(); i++)
+		str += to_string(*i);
+	return str;
+}
+
+void main() {
+	int n = 2;
+	int k = 1;
+	string str = getPermutation(n, k);
+	cout << str << endl;
+	cin.get();
+}
