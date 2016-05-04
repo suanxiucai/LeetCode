@@ -1,0 +1,58 @@
+//Determine if a Sudoku is valid, according to : Sudoku Puzzles - The Rules.
+//The Sudoku board could be partially filled, where empty cells are filled with the character '.'.
+//A partially filled sudoku which is valid.
+//Note :
+//	A valid Sudoku board(partially filled) is not necessarily solvable.Only the filled cells need to be validated.
+//	Subscribe to see which companies asked this question
+
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+bool isValidCore(int a[], int b) {//如果b这个数在数组中是不是第一次出现。
+	if (a[b] == 1)   return false;
+	else
+	{
+		a[b] = 1;
+		return true;
+	}
+}
+
+bool isValidSudoku(vector<vector<char>>& board) {
+	int RowValid[10] = { 0 };//判断每一行是否合法，可以复用
+	int ColValid[9][10] = { 0 };//判断每一列是否合法 一共9行，每行10个可能的数字
+	int SubBoradValid[9][10] = { 0 };//从左上角的的九宫格开始计数为0，数组的每一行代表一个就宫格
+	for (int row = 0; row < 9; row++) {
+		memset(RowValid, 0, sizeof(RowValid));//每一行开始处理时，将RowValid清0，达到复用的目的。
+		for (int col = 0; col < 9; col++) {
+			if (board[row][col] != '.') {
+				if (!isValidCore(RowValid, board[row][col] - '0') ||//判断行是否合法
+					!isValidCore(ColValid[col], board[row][col] - '0') ||//判断列是否合法
+					!isValidCore(SubBoradValid[row / 3 * 3 + col / 3], board[row][col] - '0'))//判断九宫格是否合法，(row,col)所在的九宫格为row/3*3+col/3 !!!!
+					return false;
+			}
+		}
+	}
+	return true;
+}
+
+void main() {
+	vector<vector<char>>a = { {'.','8','7','6','5','4','3','2','1' },
+	{ '2','.','.','.','.','.','.','.','.', },
+	{ '3','.','.','.','.','.','.','.','.', },
+	{ '4','.','.','.','.','.','.','.','.', },
+	{ '5','.','.','.','.','.','.','.','.', },
+	{ '6','.','.','.','.','.','.','.','.', },
+	{ '7','.','.','.','.','.','.','.','.', },
+	{ '8','.','.','.','.','.','.','.','.', },
+	{ '9','.','.','.','.','.','.','.','.', },
+	};
+	bool b = isValidSudoku(a);
+	cout << b << endl;
+	cin.get();
+}
+
