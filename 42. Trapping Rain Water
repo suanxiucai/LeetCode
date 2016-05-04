@@ -1,0 +1,46 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+//分析：第一个柱体和最后一个柱体肯定是不能装水，所以不用分析。
+//对于中间的元素，需要找到该数左边最大的数Left_Max_Num，右边最大的数Reight_Max_Num，然后取两者中较小的MaxHeight；
+//然后用MaxHeight减去当前的值，如果差值小于等于0，则不能装水，反之差值就是可以装水的量。
+//剩下的就是怎么高效的求左边和右边最大值的问题。因为是从前向后遍历，所有左边的最大值可以在遍历的过程中判断得到。对于右边的最大值，
+//我们可以先求全局的最大值，并记录其所在的索引位置。当我们当前分析的元素在全局最大值的左侧时，那么当前元素右侧的最大值肯定就是
+//这个全局最大值，不需要改变。如果我们分析的值的位置已经越过了全局最大值，那么我们需要更新这个最大值，就是再次计算该值右侧序列的全局最大值。
+int trap(vector<int>& height) {
+	int result = 0;
+	if (height.size() <= 2)//少于两个数就不用分析了
+		return result;
+	int Left_Max_Num=height[0];//左侧最大值赋初值
+	vector<int>::iterator Rifht_Max_Itr=max_element(height.begin(),height.end());//全局最大值的索引
+	int Reight_Max_Num = *Rifht_Max_Itr;//右侧最大值赋初值
+	int MaxHeight;
+	for (int index = 1; index <= height.size() - 2; index++) {
+		
+		Left_Max_Num = max(Left_Max_Num, height[index]);//找到左侧的最大值
+
+		if(height.begin()+index<= Rifht_Max_Itr)//找到右侧的最大值。如果当前分析的元素位置没有超过全局最大值的位置，则直接比较
+			MaxHeight = min(Left_Max_Num, Reight_Max_Num);
+		else {
+			Rifht_Max_Itr = max_element(height.begin() + index + 1, height.end());//如果当前分析元素的位置已经越过了全局最大值，则更新
+			Reight_Max_Num= *Rifht_Max_Itr;
+			MaxHeight = min(Left_Max_Num, Reight_Max_Num);
+		}
+
+		if (MaxHeight - height[index] > 0)//计算储水量,只有差值大于0才能储水
+			result += (MaxHeight - height[index]);
+	}
+	return result;
+}
+
+void main() {
+	vector<int>a = { 0,1,0,2,1,0,1,3,2,1,2,1 };
+	int b = trap(a);
+	cout << b << endl;
+	cin.get();
+}
+
