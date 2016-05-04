@@ -13,7 +13,7 @@
 #include<string>
 using namespace std;
 
-bool isValidCore(int a[], int b) {//如果b这个数在数组中是不是第一次出现。
+bool isValidCore(int a[], int b) {//判断b这个数在数组中是不是第一次出现。
 	if (a[b] == 1)   return false;
 	else
 	{
