@@ -1,0 +1,36 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+//Given a non - negative number represented as an array of digits, plus one to the number.
+//The digits are stored such that the most significant digit is at the head of the list.
+
+//思路：直接模拟加法的过程，但是最高位可能产生进位，但是vector又没有push_front的操作。所以考虑把原始的vector进行reverse，对于最
+//后一个进位可以用push_back,然后再讲vector翻转一次。
+void plusOneCore(int &a, int &b) {
+	int temp = (a + b) / 10;//产生的进位
+	a = (a + b) % 10;
+	b = temp;
+}
+
+vector<int> plusOne(vector<int>& digits) {
+	reverse(digits.begin(), digits.end());//进行第一次翻转
+	int toBePlus = 1;
+	for (int i = 0; i <=digits.size() - 1; i++) {
+		plusOneCore(digits[i], toBePlus);
+	}
+	if (toBePlus != 0)//如果最后一位加法产生的进位不是0
+		digits.push_back(toBePlus);
+	reverse(digits.begin(), digits.end());//第二次翻转
+	return digits;
+}
+void main() {
+	vector<int>a = { 9 };
+	vector<int>b = plusOne(a);
+	for (auto i : b)
+		cout << i << " ";
+}
+
