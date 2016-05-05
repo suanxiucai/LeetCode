@@ -1,0 +1,33 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//You are climbing a stair case.It takes n steps to reach to the top.
+//Each time you can either climb 1 or 2 steps.In how many distinct ways can you climb to the top ?
+//思路，是个斐波那契数列问题，就是f(n)=f(n-1)+f(n-2)；n=1时，f(n)=1 ;n=2时，f(n)=2；
+
+int climbStairs(int n) {
+	if (n <2)
+		return 1;
+	if (n == 2)
+		return 2;
+	int f_n_1 = 2;
+	int f_n_2 = 1;
+	int f_temp;
+	for (int i = 3; i <= n; i++) {
+		f_temp = f_n_1 + f_n_2;//相加
+		f_n_2 = f_n_1;//更新
+		f_n_1 = f_temp;
+	}
+	return f_temp;
+}
+void main() {
+	int a = 3;
+	int b = climbStairs(a);
+	cout << b;
+}
+
