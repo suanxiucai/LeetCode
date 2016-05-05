@@ -1,0 +1,10 @@
+//数字逐个异或就可以了  异或是^ 与是& 或是| 取反是~
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int res=0;
+        for(auto i:nums)
+            res=res^i;
+        return res;
+    }
+};
