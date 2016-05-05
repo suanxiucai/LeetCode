@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//思路 n位格雷码递归的用n-1位格雷码生成。n=1时，肯定为{0,1} ；n=2时，先将其翻转为{1,0}，然后再在高位加1(就是加上2^(n-1))
+//变为{11,10}，此时把两个数组合并为{0,1,11,10},也可以看做{00,01,11,10}；
+//同理，n=3时，将n=2的结果翻转为{10,11,01,00},然后高位补1为{110,111,101,100},然后将两个数组拼接{00,01,11,10，110,111,101,100}
+//也就是{000,001,011,010,110,111,101,100}
+
+vector<int> grayCode(int n) {
+	vector<int>result = { 0,1 };
+	vector<int>temp;
+	int gap = 1;
+	if (n <= 0)   return result = { 0 };
+	if (n == 1)   return result;
+	for (int i = 2; i <= n; i++) {
+		temp = result;
+		reverse(temp.begin(), temp.end());//翻转
+		gap = gap * 2;//为了完成在temp元素的高位加1
+		for (auto &j : temp)
+			j += gap;
+		result.insert(result.end(), temp.begin(), temp.end());//两个数组拼接在一起  注意用insert！！！！！
+	}
+	return result;
+}
+void main() {
+	int a = 0;
+	vector<int>b = grayCode(a);
+	for (auto i : b) {
+		cout << i << " ";
+	}
+}
+
