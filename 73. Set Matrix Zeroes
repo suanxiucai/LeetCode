@@ -1,0 +1,47 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//思路：先找到为0的元素，然后记下其二维坐标。最后再根据坐标删除行列。注意原始矩阵中可能有多个值为0，而不仅仅是一个。
+void setZeroesCore(vector<vector<int>>& matrix, int i, int j, int m, int n) {
+	for (int a = 0; a < n; a++)//删除该行
+		matrix[i][a] = 0;
+	for (int a = 0; a < m; a++)//删除该列
+		matrix[a][j] = 0;
+}
+
+void setZeroes(vector<vector<int>>& matrix) {
+	int m = matrix.size();
+	int n = matrix[0].size();
+	int i, j;
+	vector<int>index;
+	for (i = 0; i < m; i++) {
+		for (j = 0; j < n; j++) {
+			if (matrix[i][j] == 0)
+			{
+				index.push_back(i);
+				index.push_back(j);
+			}
+		}
+	}
+	if (!index.empty()) {
+		for (int a = 0; a <= index.size() - 2; a += 2) {
+			setZeroesCore(matrix, index[a], index[a + 1], m, n);
+		}
+	}
+}
+
+void main() {
+	vector<vector<int>>a = { {1} };
+	setZeroes(a);
+	for (auto i : a) {
+		for(auto j:i)
+		    cout << j << " ";
+		cout << endl;
+	}
+}
+
