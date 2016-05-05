@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//创建一个长度为 sizeof(int) 的数组 count[sizeof(int)]， count[i] 表示在在 i 位
+//出现的 1 的次数。如果 count[i] 是 3 的整数倍，则忽略；否则就把该位取出来组成答案。
+
+int singleNumber(vector<int>& nums) {
+	const int Size = sizeof(int) * 8;
+	int count[Size] = {0};
+	for (int i = 0; i < nums.size(); i++) {
+		for (int j = 0; j < Size; j++) {
+			count[j]+=(nums[i] >> j) & 1;//注意是>>
+			count[j] = count[j] % 3;
+		}
+	}
+	int res=0;
+	for (int i = 0; i < Size; i++)
+		res += (count[i] << i);//注意是<<
+	return res;
+}
+void main() {
+	vector<int>a = { 2,2,3,2 };
+	int b = singleNumber(a);
+	cout << b;
+}
+
