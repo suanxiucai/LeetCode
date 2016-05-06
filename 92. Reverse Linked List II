@@ -1,0 +1,73 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+ }
+
+ //多思考 思考清楚再动笔。
+ //特殊情况： m==n、空链表、只有一个结点的链表  都不需要翻转
+ //主要思路就是翻转链表的思路 但是细节要考虑清楚。由于可能从第一个结点就开始翻转，但是题目中给的链表都是不带头指针的，所以自己给链表
+ //增加了一个头指针，在返回的时候再去掉。设计三个指针 p0指向m结点之前的结点，p1指向m结点 p2从m+1开始动态的指向要调换的结点。
+ //需要指出的是，m结点本身不需要交换 从m+1结点开始交换就可以了 全部交换完之后 m结点已经在指定交换区间的最后位置了。
+ ListNode* reverseBetween(ListNode* head, int m, int n) {
+	if (m == n || head->next == nullptr || head==nullptr)//特殊情况
+		 return head;
+	ListNode *pHelp = (ListNode*)malloc(sizeof(ListNode));//为链表申请一个辅助的头
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = pHelp->next;//因为此时，加上辅助头 链表至少有三个结点
+	ListNode* p2 = pHelp->next->next;
+	int gap = n - m;//需要做交换的次数
+	int count = 0;
+	int index = 1;
+	while (index != m) {//将三个指针指向正确的开始位置
+		p0 = p0->next;
+		p1 = p1->next;
+		p2 = p2->next;
+		++index;
+	}
+	while (count < gap) {//开始交换 p0 p1指向的位置一直不变
+		p1->next = p2->next;
+		p2->next = p0->next;
+		p0->next = p2;
+		p2 = p1->next;
+		++count;
+	}
+	return pHelp->next;//把辅助头结点抛弃
+ }
+
+void main() {
+	
+}
