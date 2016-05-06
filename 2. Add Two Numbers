@@ -1,0 +1,76 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+ }
+
+//思路：关键点1：如果最后一位计算完后还有进位，则还要再构建一个结点 2：本题输入和输入都是没有头指针的链表，关于链表的构建也需要注意
+ //特别是对第一个结点的构建。
+ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+	ListNode *NewList = (ListNode *)malloc(sizeof(ListNode));//构建头指针,但是题目要求是返回的不带头的链表 所以返回NewList->next
+	NewList->next = nullptr;
+	ListNode *ptr= NewList;//ptr由于沿着新的链表移动
+	ListNode *p = nullptr;//用于申请构造新结点
+	int carry = 0;
+	int num = 0;
+	int num1 = 0;
+	int num2 = 0;
+	ListNode *p1 = l1;
+	ListNode *p2 = l2;
+	while (p1 != nullptr || p2 != nullptr) {//重要  没有用if else对p1 p2的几种情况分别讨论
+		num1 = (p1 != nullptr) ? p1->val : 0;//关键
+		num2 = (p2 != nullptr) ? p2->val : 0;
+		num = num1 + num2 + carry;
+		p=new ListNode(num % 10);
+		ptr->next = p;
+		ptr = ptr->next;
+		carry = num / 10;
+		p1 = (p1 != nullptr) ? p1->next : nullptr;//关键
+		p2 = (p2 != nullptr) ? p2->next : nullptr;
+	}
+	if (carry) {//如果最后一位还有进位
+		p = new ListNode(carry);
+		ptr->next = p;
+		ptr = ptr->next;
+	}
+	return NewList->next;
+}
+
+void main() {
+	ListNode *l1 = LinkedListCreatH();
+	ListNode *l2 = LinkedListCreatH();
+
+	ListNode *NEW = addTwoNumbers(l1, l2);
+	cin.get();
+}
