@@ -1,0 +1,74 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+ }
+//思路：特殊情况：空链表、一个元素的链表 都不需要操作
+ //由于题目给的链表没有头指针，所以为了方便操作，自己加一个辅助头，在返回的时候再把辅助头去掉
+ //用三个指针。p0指向链表前半段比x小的部分的最后一个元素,例如 2 3 4 6 7 x为5,那么p0就是指向4
+ //p2就是我们动态操作时候的指针，p1指向p2之前的一个元素
+ListNode* partition(ListNode* head, int x) {
+	if (head == nullptr || head->next == nullptr)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));//增加一个辅助头
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = pHelp->next->next;
+	while (p2 && (p1->val)<x)//为p0找到合适的位置
+	{
+		p0 = p0->next;
+		p1 = p1->next;
+		p2 = p2->next;
+	}
+	while (p2) {
+		if (p2->val < x) {//如果p2指向的元素比x小 则需要调换
+			p1->next = p2->next;
+			p2->next = p0->next;
+			p0->next = p2;
+			p0 = p0->next;
+			p2 = p1->next;
+		}
+		else {//反之 不需要 继续向前遍历
+			p1 = p1->next;
+			p2 = p2->next;
+		}
+	}
+	return pHelp->next;//去掉头
+}
+
+void main() {
+	
+}
