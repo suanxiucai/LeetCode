@@ -1,0 +1,83 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<2)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+}
+//思路：主要是一些细节问题 p0指向要操作的区间的前一个结点 p1指向待操作区间的一个元素  p2指向待操作区间的最后一个元素
+ListNode* reverseKGroup(ListNode* head, int k) {
+	if (head == nullptr || head->next == nullptr || k <= 1)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));//增加一个辅助头
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = p1;//p2和p1指向相同
+
+	while (p2)
+	{
+		int count = 0;
+		while (p2 && count<k - 1)//使p2指向区间的尾部
+		{
+			p2 = p2->next;
+			++count;
+		}
+		if (p2==nullptr && count <= k - 1)//注意该判断条件 重要！表示剩下的元素不够组成一个区间
+			return pHelp->next;
+		else {
+			while (p1 != p2) {//将一个区间内的元素翻转
+				p0->next = p1->next;
+				p1->next = p2->next;
+				p2->next = p1;
+
+				p1 = p0->next;//更新p1的位置  p0 p2的指向不变 ；最终结果是p1和p2指向相同，循环结束
+			}
+		}
+		int i = 0;
+		while (i<k)//更新p0的位置 为寻找下一个区间做准备
+		{
+			p0 = p0->next;
+			++i;
+		}
+		p1 = (p0 != nullptr) ? p0->next : nullptr;//更新p1的位置，为寻找下一个区间做准备
+		p2 = p1;//更新p2的位置，为寻找下一个区间做准备
+	}
+	return pHelp->next;//去掉辅助头
+}
+
+void main() {
+	ListNode*a = LinkedListCreatH();
+	int b = 3;
+	ListNode*c = reverseKGroup(a->next, b);
+}
