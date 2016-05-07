@@ -1,0 +1,78 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+}
+//思路：特殊情况首先特殊处理；因为题目中没有头结点，所以自己增加辅助头；用3个指针，p0指向重复部分之前的一个元素，p1指向重复部分的
+//头，p2指向重复部分的尾。
+ListNode* deleteDuplicates(ListNode* head) {
+	if (head == nullptr || head->next == nullptr)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));//增加一个辅助头
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = pHelp->next->next;
+	while (p2) {
+		if (p1->val == p2->val) {//如果发现两个相领的值相等，则p2继续向后，找到重复数字区间的尾部
+			while (p2->next!=nullptr && p2->next->val==p1->val)//注意while的条件 
+			{
+				p2 = p2->next;
+			}
+			p0->next = p2->next;//把中间部分在链表中去掉
+			p2->next = nullptr;
+			while (p1)//删除重复部分
+			{
+				ListNode* pTemp = p1->next;
+				delete p1;
+				p1 = pTemp;
+			}
+			p1 = p0->next;//更新p1，p2； p0至少为辅助头 所以p0的next至少为null 所以p1肯定是有指向的
+			p2 = (p1 != nullptr) ? p1->next : nullptr;//因为p1可能为空 那么这个时候p1就没有next了 不能直接写p2=p1->next;
+		}
+		else//如果相邻元素不相等  向后移
+		{
+			p0 = p0->next;
+			p1 = p1->next;
+			p2 = p2->next;
+		}
+	}
+	return pHelp->next;//去掉辅助头
+}
+void main() {
+	ListNode* L1 = LinkedListCreatH();
+	ListNode* L2 = deleteDuplicates(L1);
+	cin.get();
+}
