@@ -1,0 +1,57 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+
+ ListNode *detectCycle(ListNode *head) {
+	if (head == nullptr)
+		return nullptr;
+	ListNode *p1 = head;
+	ListNode *p2 = p1->next;
+	int count = 0;
+	while (p2)
+	{
+		if (p2->next) {
+			p2 = p2->next->next;//走两步
+			p1 = p1->next;//走一步
+			++count;//计算相遇之前走了多少步
+		}
+		else//如果p2->next为空，则证明链表有尾部的null，链表肯定没环
+			return nullptr;
+
+		if (p1 == p2) {//相遇  圈的周长为count+1  
+			ListNode* pTemp1 = head;
+			ListNode* pTemp2 = head->next;
+			int i = 0;
+			while (i < count) {//pTemp2先走count步
+                pTemp2 = pTemp2->next;
+				++i;
+			}
+				
+			while (pTemp1!=pTemp2)//然后pTemp1 pTemp2一块走  两者再次相遇的地方就是环的入口
+			{
+				pTemp1 = pTemp1->next;
+				pTemp2 = pTemp2->next;
+			}
+			return pTemp1;
+		}
+	}
+	return nullptr;
+ }
+void main() {
+	ListNode* a = (ListNode*)malloc(sizeof(ListNode));
+	a->val = 1;
+	a->next = a;
+	ListNode *b = detectCycle(a);
+	cin.get();
+}
