@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+struct RandomListNode {
+    int label;
+    RandomListNode *next, *random;
+    RandomListNode(int x) : label(x), next(NULL), random(NULL) {}
+};
+
+//思路 参考剑指offer的思路  1：将原始链表的没有元素都复制一个，但是random指针不处理 2：处理random指针 3：分离两个链表
+RandomListNode *copyRandomList(RandomListNode *head) {
+	if (head == nullptr)
+		return head;
+	RandomListNode* pHelp = (RandomListNode*)malloc(sizeof(RandomListNode));//增加一个辅助头
+	pHelp->label = -1;
+	pHelp->next = head;
+	pHelp->random = nullptr;
+
+	RandomListNode* p0 = pHelp->next;
+	while (p0)//复制每个节点
+	{
+		RandomListNode* pTemp = (RandomListNode*)malloc(sizeof(RandomListNode));
+		pTemp->label = p0->label;
+		pTemp->next = p0->next;
+		pTemp->random = nullptr;//random不处理
+		p0->next = pTemp;
+		p0 = p0->next->next;
+	}
+
+	p0 = pHelp->next;
+	while (p0) {//连接random
+		RandomListNode* p1 = p0->next;
+		if(p0->random) p1->random = p0->random->next;
+		p0 = p0->next->next;
+	}
+
+	RandomListNode* pHelpCopy = (RandomListNode*)malloc(sizeof(RandomListNode));//增加一个辅助头
+	pHelpCopy->label = -1;
+	pHelpCopy->next = head->next;
+	pHelpCopy->random = nullptr;
+
+	RandomListNode* p0_copy = pHelpCopy->next;
+	p0 = pHelp->next;
+	while (p0)//分离两个链表
+	{
+		p0->next = p0_copy->next;
+		if (p0_copy->next) {//如果p0_copy下一个不是尾
+			p0_copy->next = p0_copy->next->next;
+
+			p0 = p0->next;//更新p0 p0_copy
+			p0_copy = p0_copy->next;
+		}
+		else//如果p0_copy下一个是尾，为p0_copy->next置空
+		{
+			p0_copy->next = nullptr;
+			p0 = p0->next;
+		}
+	}
+	return pHelpCopy->next;
+}
+
+
+void main() {
+	RandomListNode* p1 = (RandomListNode*)malloc(sizeof(RandomListNode));
+	p1->label = 1;
+	p1->next = nullptr;
+	p1->random = nullptr;
+
+	RandomListNode* p2 = (RandomListNode*)malloc(sizeof(RandomListNode));
+	p2->label = 2;
+	p2->next = nullptr;
+	p2->random = nullptr;
+
+	RandomListNode* p3 = (RandomListNode*)malloc(sizeof(RandomListNode));
+	p3->label = 3;
+	p3->next = nullptr;
+	p3->random = nullptr;
+
+	p1->next = p2;
+	p2->next = p3;
+	p1->random = p3;
+
+	RandomListNode *res = copyRandomList(p1);
+
+
+}
