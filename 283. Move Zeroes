@@ -1,0 +1,35 @@
+//思路：首先是找到第一个0，然后将后面第一个非0元素复制过来，然后再继续遍历。
+//index1 index2首先要指向第一个0，然后index2要继续前进去找非0元素，如果找到就复制到index1处。
+//最后index2遍历完数组之后，index1之后的元素肯定就是应该为0的元素，所以全部赋值为0；
+void moveZeroes(vector<int>& nums) {
+	if (nums.size() <= 1)
+		return;
+	int index1 = 0;
+	int index2 = 0;
+	while (index1<nums.size() && nums[index1]!=0)//index1 index2指向第一个0元素
+	{
+		index1++;
+		index2++;
+	}
+	if (index1 == nums.size() || index1==nums.size()-1)//如果根本就不存在0元素 或者有一个0正好就在末尾
+		return;
+	else {
+		++index2;//index2开始向后找非0
+		while (index2<nums.size())
+		{
+			if (nums[index2] != 0)//如果找到非0，复制到index1指向的地方
+			{
+				nums[index1] = nums[index2];
+				index1++;
+				index2++;
+			}
+			else {
+				index2++;
+			}
+		}
+		while (index1 < nums.size()) {//index2遍历完后，index1之后的部分肯定是应该赋值为0的
+			nums[index1] = 0;
+			index1++;
+		}
+	}
+}
