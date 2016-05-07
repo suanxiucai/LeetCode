@@ -1,0 +1,77 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+}
+
+//思路：特殊情况先处理；题目中没有头结点，增加辅助头结点。
+//用两个指针，p2先走n步，然后再p1 p2一起走，最终的结果是p1指向待删除结点的前一个结点，p2指向链表的最后一个元素
+//需要注意的是，在p2先走n步后，此时p2可能为null，也就是待删除的结点就是链表的第一个结点，此时特殊处理。
+ListNode* removeNthFromEnd(ListNode* head, int n) {
+	if (head == nullptr)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));//辅助头
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = pHelp->next;
+	int count = 0;
+	while (count<n)//先走n步
+	{
+		p2 = p2->next;
+		++count;
+	}
+	if (p2 == nullptr) {//如果走n步后，直接到尾部了，证明待删除的就是第一个元素
+		pHelp->next = p1->next;
+		p1->next = nullptr;
+		delete p1;
+		p1 = nullptr;//赋值，防止成为野指针
+	}
+	else {
+		while (p2->next)//一起走
+		{
+			p2 = p2->next;
+			p1 = p1->next;
+		}
+		ListNode* pTemp = p1->next;//删除指定结点
+		p1->next = pTemp->next;
+		pTemp->next = nullptr;
+		delete pTemp;
+		pTemp = nullptr;//赋值，防止成为野指针
+	}
+	return pHelp->next;//去掉辅助头
+}
+void main() {
+	
+}
