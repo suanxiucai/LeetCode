@@ -1,0 +1,82 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+}
+
+//思路：特殊情况首先处理；由于题目中没有头结点，所以自己加一个辅助头结点。需要注意的是，k可能大于链表的长度，所以就存在一个循环的问题
+//所以需要求出链表的长度len，然后求出新的k值即Newk。然后就是链表拼接的问题了。用两个指针，p2先走k步，然后p1和p2再一块走。p1指向指定
+//区间之前的一个元素，p2指向指定区间的最后一个元素.
+ListNode* rotateRight(ListNode* head, int k) {
+	if (head == nullptr || head->next == nullptr)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));//增加一个辅助头
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = pHelp->next;
+	int count=0;
+
+	ListNode* p=pHelp->next;//为了求链表的长度len
+	int len = 0;
+	while (p)
+	{
+		p = p->next;
+		++len;
+	}
+	int NewK = k%len;
+	
+	if (NewK == 0)//更新k
+		return head;
+
+	while (count < NewK) {//p2先走NewK步
+		p2 = p2->next;
+		count++;
+	}
+
+	while (p2->next)//两个指针一块走
+	{
+		p2 = p2->next;
+		p1 = p1->next;
+	}
+	ListNode* pTemp = p1->next;//拼接
+	p1->next = p2->next;
+	p2->next = pHelp->next;
+	pHelp->next = pTemp;
+
+	return pHelp->next;//去掉辅助头
+}
+void main() {
+	
+}
