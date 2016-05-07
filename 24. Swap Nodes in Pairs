@@ -1,0 +1,61 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+
+ListNode* LinkedListCreatH()//构造链表的辅助函数
+ {
+	 ListNode *L;
+	 L = (ListNode *)malloc(sizeof(ListNode));   //申请头结点空间
+	 L->next = NULL;                      //初始化一个空链表
+
+	 int x;                         //x为链表数据域中的数据
+	 cout << "输入";
+	 int i = 0;
+	 while (i<3)
+	 {
+		 cin >> x;
+		 ++i;
+		 ListNode *p;
+		 p = (ListNode *)malloc(sizeof(ListNode));   //申请新的结点 
+		 p->val = x;                     //结点数据域赋值 
+		 p->next = L->next;                    //将结点插入到表头L-->|2|-->|1|-->NULL 
+		 L->next = p;
+	 }
+	 cout << "结束";
+	 return L;
+}
+
+ListNode* swapPairs(ListNode* head) {
+	if (head == nullptr || head->next == nullptr)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));
+	pHelp->next = head;
+	pHelp->val = -1;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = pHelp->next->next;
+	while (p2)
+	{
+		p1->next = p2->next;
+		p2->next = p0->next;
+		p0->next = p2;
+
+		p0 = p0->next->next;//更新p0 p1 p2的位置 需要画图理解
+		p1 = p1->next;
+		p2 = (p1 != nullptr) ? p1->next : nullptr;
+	}
+	return pHelp->next;
+}
+void main() {
+	
+}
