@@ -1,0 +1,50 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+//思路 注意题目给的直接是待删除的结点而不是链表的头结点；所以可以把待删除结点的后一个结点的值复制过来，然后删除该结点即可
+void deleteNode(ListNode* node) {
+	if (!node)
+		return;
+	ListNode* pTemp = nullptr;
+
+	node->val = node->next->val;
+	pTemp = node->next;
+	node->next = pTemp->next;
+	pTemp->next = nullptr;
+	delete pTemp;
+	pTemp = nullptr;
+}
+void main() {
+	ListNode* p1 = (ListNode*)malloc(sizeof(ListNode));
+	p1->val = 1;
+	p1->next = nullptr;
+
+	ListNode* p2 = (ListNode*)malloc(sizeof(ListNode));
+	p2->val = 2;
+	p2->next = nullptr;
+
+	/*ListNode* p3 = (ListNode*)malloc(sizeof(ListNode));
+	p3->val = 3;
+	p3->next = nullptr;*/
+
+	/*ListNode* p4 = (ListNode*)malloc(sizeof(ListNode));
+	p4->val = 4;
+	p4->next = nullptr;*/
+	
+	p1->next = p2;
+	//p2->next = p3;
+	//p3->next = p4;
+
+	bool res=isPalindrome(p1);
+	cin.get();
+}
