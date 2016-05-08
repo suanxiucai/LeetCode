@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+//思路：题目很简单 需要注意两点 1：headA和headB指向的本身就是同一个链表的情况,或者相交点是一个链表的第一个结点，为了方便，增加辅助头结点
+// 2：两个链表不相交，指向的结点都是null，这个需要判断一下
+ int GetLength(ListNode* head) {
+	int count = 0;
+	ListNode* p = head;
+	while (p)
+	{
+		++count;
+		p = p->next;
+	}
+	return count;
+ }
+ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+	if (!headA || !headB)
+		return nullptr;
+	if (headA == headB)
+		return headA;
+	ListNode* pHelp_A = (ListNode*)malloc(sizeof(ListNode));
+	pHelp_A->val = -1;
+	pHelp_A->next = headA;
+	ListNode* pHelp_B = (ListNode*)malloc(sizeof(ListNode));
+	pHelp_B->val = -1;
+	pHelp_B->next = headB;
+
+	int Len_A = GetLength(headA);
+	int Len_B = GetLength(headB);
+	ListNode* p1 = nullptr;
+	ListNode* p2 = nullptr;
+	int diff = abs(Len_A - Len_B);
+	int count = 0;
+
+	p1 = (Len_A >= Len_B) ? pHelp_A : pHelp_B;//p1指向长的链表
+	p2 = (Len_A >= Len_B) ? pHelp_B : pHelp_A;
+	while (count<diff){
+		p1 = p1->next;
+		count++;
+	}
+	while (p1 && p2)
+	{
+		if (p1->next && p1->next == p2->next)//p1->next不能为null是为了防止两个都指向null发生误判
+			return p1->next;
+		else{
+			p1 = p1->next;
+			p2 = p2->next;
+		}
+	}
+	return  nullptr;
+}
+void main() {
+	ListNode* p1 = (ListNode*)malloc(sizeof(ListNode));
+	p1->val = 1;
+	p1->next = nullptr;
+
+	ListNode* p2 = (ListNode*)malloc(sizeof(ListNode));
+	p2->val = 2;
+	p2->next = nullptr;
+
+	ListNode* p3 = (ListNode*)malloc(sizeof(ListNode));
+	p3->val = 3;
+	p3->next = nullptr;
+
+	ListNode* p4 = (ListNode*)malloc(sizeof(ListNode));
+	p4->val = 4;
+	p4->next = nullptr;
+
+	ListNode* p5 = (ListNode*)malloc(sizeof(ListNode));
+	p5->val = 5;
+	p5->next = nullptr;
+
+	
+	p1->next = p2;
+	//p2->next = p3;
+	p3->next = p4;
+	//p4->next = p5;
+
+	ListNode* res= getIntersectionNode(p1,p3);
+	cin.get();
+}
