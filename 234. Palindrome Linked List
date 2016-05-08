@@ -1,0 +1,86 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+//题目要求是o(n)时间 o(1)空间  所以思路是1：先找到链表的中点 2：然后将后半段翻转 3：两个指针分别指向前半段和后半段进行判断
+ListNode* ReverseList(ListNode* head) {
+	if (head == nullptr || head->next == nullptr)
+		return head;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));
+	pHelp->val = -1;
+	pHelp->next = head;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = pHelp->next;
+	ListNode* p2 = pHelp->next->next;
+	while (p2)
+	{
+		p1->next = p2->next;
+		p2->next = p0->next;
+		p0->next = p2;
+		p2 = p1->next;
+	}
+	return pHelp->next;
+}
+
+
+bool isPalindrome(ListNode* head) {
+	if (!head || !head->next)
+		return true;
+	ListNode* pFast = head;
+	ListNode* pSlow = head;
+	ListNode* prev = nullptr;
+	while (pFast && pFast->next)
+	{
+		prev = pSlow;
+		pSlow = pSlow->next;
+		pFast = pFast->next->next;
+	}//prev指向的位置就是前半段的最后一个 下面将prev->next的后半段翻转
+	prev->next=ReverseList(prev->next);
+	ListNode* first = prev->next;//指向后半段的第一个元素
+	ListNode* second = head;//指向前半段的第一个元素
+
+	while (second != prev->next)
+	{
+		if (first->val != second->val)
+			return false;
+		else {
+			first = first->next;
+			second = second->next;
+		}
+	}
+	return true;
+}
+
+void main() {
+	ListNode* p1 = (ListNode*)malloc(sizeof(ListNode));
+	p1->val = 1;
+	p1->next = nullptr;
+
+	ListNode* p2 = (ListNode*)malloc(sizeof(ListNode));
+	p2->val = 2;
+	p2->next = nullptr;
+
+	/*ListNode* p3 = (ListNode*)malloc(sizeof(ListNode));
+	p3->val = 3;
+	p3->next = nullptr;*/
+
+	/*ListNode* p4 = (ListNode*)malloc(sizeof(ListNode));
+	p4->val = 4;
+	p4->next = nullptr;*/
+	
+	p1->next = p2;
+	//p2->next = p3;
+	//p3->next = p4;
+
+	bool res=isPalindrome(p1);
+	cin.get();
+}
