@@ -1,0 +1,75 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+ struct ListNode {
+    int val;
+    ListNode *next;
+    ListNode(int x) : val(x), next(NULL) {}
+};
+//思路 新建一个链表，然后比较两个链表头元素中较大的插入新链表  如果一个链表提前遍历完 则将另一个链表剩余的元素全部从插入；
+ //注意p1_next = (p1)?p1->next:nullptr; int val_p1 = (p1) ? p1->val : INT32_MAX;的写法 这样写避免了对只有一个链表的情况
+ //再次进行遍历
+ListNode* mergeTwoLists(ListNode* l1, ListNode* l2) {
+	if (!l1)
+		return l2;
+	if (!l2)
+		return l1;
+	ListNode* pHelp = (ListNode*)malloc(sizeof(ListNode));
+	pHelp->val = -1;
+	pHelp->next = nullptr;
+	ListNode* p0 = pHelp;
+	ListNode* p1 = l1;
+	ListNode* p2 = l2;
+	ListNode* p1_next = nullptr;
+	ListNode* p2_next = nullptr;
+	while (p1 || p2)
+	{
+		p1_next = (p1)?p1->next:nullptr;
+		p2_next = (p2)?p2->next:nullptr;
+		int val_p1 = (p1) ? p1->val : INT32_MAX;
+		int val_p2 = (p2) ? p2->val : INT32_MAX;
+		if (val_p1 <= val_p2) {
+			p1->next = p0->next;
+			p0->next = p1;
+			p0 = p0->next;
+			p1 = p1_next;
+		}
+		else{
+			p2->next = p0->next;
+			p0->next = p2;
+			p0 = p0->next;
+			p2 = p2_next;
+		}
+	}
+	return pHelp->next;
+}
+
+void main() {
+	ListNode* p1 = (ListNode*)malloc(sizeof(ListNode));
+	p1->val = 1;
+	p1->next = nullptr;
+
+	ListNode* p2 = (ListNode*)malloc(sizeof(ListNode));
+	p2->val = 2;
+	p2->next = nullptr;
+
+	/*ListNode* p3 = (ListNode*)malloc(sizeof(ListNode));
+	p3->val = 3;
+	p3->next = nullptr;*/
+
+	/*ListNode* p4 = (ListNode*)malloc(sizeof(ListNode));
+	p4->val = 4;
+	p4->next = nullptr;*/
+	
+	p1->next = p2;
+	//p2->next = p3;
+	//p3->next = p4;
+
+	bool res=isPalindrome(p1);
+	cin.get();
+}
