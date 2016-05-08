@@ -1,0 +1,16 @@
+class Solution {
+public:
+     bool containsDuplicate(vector<int>& nums) {
+	 if (nums.empty())
+		 return false;
+	 map<int, int>count;
+	 for (auto i : nums) {
+		 ++count[i];
+	 }
+	 for (auto i : count) {
+		 if (i.second >= 2)
+			 return true;
+	 }
+	 return false;
+ }
+};
