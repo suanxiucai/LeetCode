@@ -1,0 +1,26 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+//思路 nums的size是n 那么nums中的数字的范围就是0，，，n。但是缺少其中的一个
+int missingNumber(vector<int>& nums) {
+	sort(nums.begin(), nums.end());
+	for (int i = 0, j = 0; i <= nums.size(); i++) {
+		if (j<nums.size() && nums[j] != i)
+			return i;
+		if (j == nums.size())//如果是缺少数字n
+			return i;
+		j++;
+	}
+	return -1;
+}
+
+void main() {
+	vector<int>a = { 4,0,0,0,0,0};
+	vector<int>b = { 1,2,3,5,6 };
+	merge(a,1 ,b,5);
+	cin.get();
+} 
