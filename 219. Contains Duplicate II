@@ -1,0 +1,34 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//思路 map的关键字是相应的元素，对应的值是元素的索引。没次存入之前先进行判断，看索引差值有没有小于等于k
+ bool containsNearbyDuplicate(vector<int>& nums, int k) {
+	 if (nums.size() <= 1)
+		 return false;
+	 map<int, int>count;
+	 for (int i = 0; i < nums.size();i++) {
+		 auto itr = count.find(nums[i]);
+		 if (itr == count.end()) {//没找到 直接存入
+			 count[nums[i]]=i;
+		 }
+		 else {
+			 if ((i - itr->second) <= k)//找到了 先判断
+				 return true;
+			 else
+				 count[nums[i]] = i;//如果不满足条件 将新的值存入
+		 } 
+	 }
+	 return false;
+ }
+
+void main() {
+	vector<int>a = { -1,-1 };
+	int k = 1;
+	bool res=containsNearbyDuplicate(a, k);
+	cin.get();
+}
