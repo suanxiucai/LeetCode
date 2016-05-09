@@ -1,0 +1,39 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//如果用map就不是o（1）的空间复杂度了；所以用摩尔投票法；
+//1:根据分析 满足条件的众数最多有两个，所以我们设两个众数majority_1 majority_2 然后在遍历的过程中更新
+//2：我们最终找出的是数量最多的两个数，但是并不一定满足条件，我们还要再验算一边。
+//http://www.cnblogs.com/grandyang/p/4606822.html
+vector<int> majorityElement(vector<int>& nums) {
+	int majority_1 = 0;
+	int majority_2 = 0;
+	int count_majority_1 = 0;
+	int count_majority_2 = 0;
+	vector<int>res;
+	for (auto i : nums) {//重要！！！
+		if (i == majority_1)  count_majority_1++;
+		else if (i == majority_2)  count_majority_2++;
+		else if (count_majority_1 == 0) { majority_1 = i;   count_majority_1 = 1; }
+		else if (count_majority_2 == 0) { majority_2 = i;  count_majority_2 = 1; }
+		else { --count_majority_1; --count_majority_2; }
+	}
+	count_majority_1 = 0;
+	count_majority_2 = 0;
+	for (auto i : nums) {//验算
+		if (i == majority_1)   count_majority_1++;
+		else if (i == majority_2)   count_majority_2++;
+	}
+	if (count_majority_1 > nums.size() / 3)   res.push_back(majority_1);
+	if (count_majority_2 > nums.size() / 3)    res.push_back(majority_2);
+	return res;
+}
+
+void main() {
+	
+} 
