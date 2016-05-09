@@ -1,0 +1,31 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+//思路：分别计算该元素左边数的积 和 右边数的积；左边的积可以通过遍历的过程逐步得到，右边数的积可以提前算好，用的时候直接取
+vector<int> productExceptSelf(vector<int>& nums) {
+	vector<int>res;
+	int Left_product = 1;
+	int Right_product = 1;
+	int Temp = 1;
+	vector<int>Right;//存右边数的积
+
+	Right.push_back(1);//最后一个元素的右边数的成绩是1
+	for (int i = nums.size() - 1; i > 0; i--) {//计算右边数的积，我们待会倒着用，省去了翻转数组的时间
+		Temp *= nums[i];
+		Right.push_back(Temp);
+	}
+	for (int i = 0; i < nums.size(); i++) {
+		Left_product = (i == 0) ? 1 : Left_product*nums[i - 1];
+		Right_product = Right[nums.size() - 1 - i];//倒着取
+		res.push_back(Left_product*Right_product);
+	}
+	return res;
+}
+
+void main() {
+	
+} 
