@@ -1,0 +1,43 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+//思路 要正确理解这个题目的意思，如果把题目中形参换成数组可能更好理解。例如vector<int>a = { 4,0,0,0,0,0};
+//vector<int>b = { 1,2,3,5,6 };merge之后应该是{1 2 3 4 5 6}；参数中m n是vector中实际有效数字的个数
+//我的做法是直接将两个数组merge，然后将a中末尾的无效的0删掉。(正确的思路是直接把a中的0用b中的值覆盖掉)
+void merge(vector<int>& nums1, int m, vector<int>& nums2, int n) {
+	if (n == 0)
+		return;
+	if (m == 0) {
+		nums1 = nums2;
+		return;
+	}
+	int M = m;//把m备份一下
+	int p1 = 0;
+	int p2 = 0;
+	int count = 0;
+	while (p1 < m && p2<n) {
+		if (nums2[p2] <= nums1[p1]) {
+			nums1.insert(nums1.begin() + p1, nums2[p2]);
+			p2++;
+			p1++;//实际p1指向的位置并不要发生改变，但是p1是个索引，不是指针，在p1之前插入了新元素，所以p1也跟着增大1
+			m++;//a数组有效数字的位数也要跟着增加1
+		}
+		else
+			p1++;
+	}
+	if (p1 == m && p2 < n) {//a中有效的数字遍历完了 b中的还没有
+		nums1.insert(nums1.begin() + m, nums2.begin() + p2, nums2.end());
+	}
+	nums1.erase(nums1.begin() + M + n, nums1.end());//全部结束之后，将无效的0删除
+}
+
+void main() {
+	vector<int>a = { 4,0,0,0,0,0};
+	vector<int>b = { 1,2,3,5,6 };
+	merge(a,1 ,b,5);
+	cin.get();
+} 
