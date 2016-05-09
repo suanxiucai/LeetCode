@@ -1,0 +1,26 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+
+//思路 这个想法很巧妙。只要当天的价格比前一天的价格高，就交易一次。题目只是虚拟的一个场景，不要用实际的股票交易股则来想。
+int maxProfit(vector<int>& prices) {
+	if (prices.size() <= 1)
+		return 0;
+	int res = 0;
+	for (int i = 1; i < prices.size(); i++) {
+		if (prices[i] > prices[i - 1])
+			res += (prices[i] - prices[i - 1]);
+	}
+	return res;
+}
+
+
+void main() {
+	vector<int>a = { 4,1,2};
+	int res= maxProfit(a);
+	cin.get();
+}
