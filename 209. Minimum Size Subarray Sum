@@ -1,0 +1,37 @@
+#include <iostream>
+#include <vector>
+#include <map>
+#include <algorithm>
+#include<numeric>
+#include<string>
+using namespace std;
+//思路 用两个指针，如果两个指针之间的区间的数字的和小于s，index2就右移，如果大了，index1右移（想象滑动窗口的工作原理）
+int minSubArrayLen(int s, vector<int>& nums) {
+	int count=INT32_MAX;
+	if (nums.empty())
+		return 0;
+	int index1 = 0;
+	int index2 = 0;
+	int sum = nums[0];
+	while (index2 < nums.size()) {
+		if (sum < s) {
+			if(index2<nums.size()-1)    index2++;//index2右移动，让更多的元素加入区间
+			else break;//index2==size-1时，index2不能再加1了，要跳出
+			sum = sum + nums[index2];
+		}
+		else {
+			count = min(count, index2 - index1 + 1);//更新
+			sum -= nums[index1];//index1右移，减小区间内的元素
+			index1++;
+		}
+	}
+	return count = (count == INT32_MAX) ? 0 : count;//这个地方要注意，当初为了可以使用min求count，所以初值为INT32_MAX，
+	                                                //但是题目要求，要是没有符合要求的就返回0
+}
+
+void main() {
+	vector<int>a = { 2,3,1,2,4,1};
+	int s = 7;
+	int b = minSubArrayLen(s,a);
+	cout<< b;
+} 
