@@ -6,29 +6,29 @@
 #include<string>
 using namespace std;
 
-vector<string> summaryRanges(vector<int>& nums) {
+class Solution {
+public:
+    vector<string> summaryRanges(vector<int>& nums) {
 	vector<string>res;
 	if (nums.empty())
 		return res;
 	int index1 = 0;
 	int index2 = 0;
 	int Len = nums.size();
-	while (index2 <= Len - 1) {
-		if (index2<Len - 1 && nums[index2 + 1] == nums[index2] + 1) {
-			index2++;
-		}
-		else if (index2 == Len - 1 || nums[index2 + 1] != nums[index2] + 1) {
-			if (index1 == index2) 
-				res.push_back(to_string(nums[index1]));
-			else 
-				res.push_back(to_string(nums[index1]) + string("->") + to_string(nums[index2]));
-			index2++;
-			index1 = index2;
-		}
+	while (index2 <= Len-1) {
+		while(index2+1<Len && nums[index2+1] == nums[index2] + 1) 
+			index2++;//跳过在同一个上升区间的元素
+		if (index1 == index2) //开始判断
+			res.push_back(to_string(nums[index1]));
+		else 
+			res.push_back(to_string( nums[index1]) + string("->") + to_string(nums[index2]));
+		
+		index2++;//更新
+		index1 = index2;
 	}
 	return res;
 }
-
+};
 void main() {
 	vector<int>a = { 1,2,3,5,7,8,10};
 	vector<string>b = summaryRanges(a);
