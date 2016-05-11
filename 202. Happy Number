@@ -1,0 +1,23 @@
+//思路 关键在于怎么判断程序进入了死循环，不会出现结果1；用一个set存出现的结果，如果结果第二次出现就怎么程序要进入一个死循环，就输出false退出
+class Solution {
+public:
+    bool isHappy(int n) {
+        set<int>count;
+        count.insert(n);
+        while(true){//注意用true直接对循环进行控制
+            int sum=0;
+            while(n){//求n的各位数字的同时求了sum
+                sum+=(n%10)*(n%10);
+                n=n/10;
+            }
+            
+            if(sum==1)//如果结果为1
+              return true;
+            else if(count.find(sum)!=count.end())//如果死循环
+              return false;
+            
+            count.insert(sum); //如果不是以上的两种结果，就继续
+            n=sum;
+        }
+    }
+};
