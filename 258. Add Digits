@@ -1,0 +1,12 @@
+//思路  X=fn*Xn+fn-1*Xn-1+...+f1*x1 , Xn=pow(10,n-1);   一次题目中的操作后为X’=fn+fn-1+...f1
+//X-X' = fn*(Xn - 1) + fn-1*(Xn-1 - 1) + ... f1*(X1 - 1)
+//     = fn*9···99 + fn-1*9···9 + ... f1*0
+//     = 9*( fn*1···11 + fn-1*1···1 + ... f2*1 + f1*0 )
+//     = 9*S (S is a non-negative integer)
+//所以X'=x-9的倍数 也就是xmod9就可以了 但是考虑到最终结果是0-9范围内，如果num=9 那么9%9=0 不符合题目要求  所以修正为1+（num-1）%9
+class Solution {
+public:
+    int addDigits(int num) {
+        return 1+(num-1)%9;
+    }
+};
