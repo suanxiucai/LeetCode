@@ -1,0 +1,52 @@
+//1, 动态规划。到第i层的第k个顶点的最小路径长度表示为f(i, k)，则f(i, k) = min{ f(i - 1,k),  f(i - 1,k - 1) } +d(i, k); 其中d(i, k)表示原来三角形数组里的第i行第k列的元素。
+//   则可以求得从第一行到最终到第length - 1行第k个元素的最小路径长度，最后再比较第length - 1行中所有元素的路径长度大小，求得最小值。
+//2, 本题主要关心的是空间复杂度不要超过n。
+//3, 注意边界条件——每一行中的第一和最后一个元素在上一行中只有一个邻居。而其他中间的元素在上一行中都有两个相邻元素
+
+//方法1 传统的dp方法  空间复杂度为o(m*n);
+class Solution {
+public:
+	int minimumTotal(vector<vector<int>>& triangle) {
+		int Len = triangle.size();
+		if (Len == 0)
+			return triangle[0][0];
+		vector<vector<int>>dp(Len, vector<int>(Len));
+		dp[0][0] = triangle[0][0];
+		for (int i = 1; i<Len; i++) {
+			for (int j = 0; j<triangle[i].size(); j++) {
+				if (j == 0)
+					dp[i][j] = triangle[i][j] + dp[i - 1][j];
+				else if (j == triangle[i].size() - 1)
+					dp[i][j] = triangle[i][j] + dp[i - 1][j - 1];
+				else
+					dp[i][j] = triangle[i][j] + min(dp[i - 1][j], dp[i - 1][j - 1]);
+			}
+		}
+		return *min_element(dp[Len - 1].begin(), dp[Len - 1].end());
+	}
+};
+//方法2  由于本次计算结果只依赖于上一层计算的结果 所以只用两个数组就够了 而不需要一个二维数组
+class Solution {
+public:
+	int minimumTotal(vector<vector<int>>& triangle) {
+		int Len = triangle.size();
+		if (Len == 0)
+			return triangle[0][0];
+		vector<int>dp(Len);
+		vector<int>Temp(Len);
+		dp[0] = triangle[0][0];
+		for (int i = 1; i<Len; i++) {
+			vector<int>().swap(Temp);//清空
+			Temp = dp;//用来保存上一层的结果
+			for (int j = 0; j<triangle[i].size(); j++) {
+				if (j == 0)
+					dp[j] = triangle[i][j] + Temp[j];
+				else if (j == triangle[i].size() - 1)
+					dp[j] = triangle[i][j] + Temp[j - 1];
+				else
+					dp[j] = triangle[i][j] + min(Temp[j], Temp[j - 1]);
+			}
+		}
+		return *min_element(dp.begin(), dp.end());
+	}
+};
