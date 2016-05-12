@@ -1,0 +1,55 @@
+//传统的dp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if(nums.empty())
+          return 0;
+        vector<int>dp(nums.size());
+        dp[0]=nums[0];
+        for(int i=1;i<nums.size();i++){
+            if(dp[i-1]<0)
+               dp[i]=nums[i];//如果之前的和为负值 那么加上当前的数是没有好处的  例如之前的和为-7 当前为1 加上后为-6 还没有1大
+            else
+               dp[i]=dp[i-1]+nums[i];
+        }
+        return *max_element(dp.begin(),dp.end());
+        
+        
+    }
+};
+
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if(nums.empty())
+            return 0;
+        vector<int>dp(nums.size());
+        dp[0]=nums[0];
+        int MAX_NUM=nums[0];
+        for(int i=1;i<nums.size();i++){
+            dp[i]=max(dp[i-1]+nums[i],nums[i]);//要么加上现在这个元素，要么重新从当前元素开始
+            MAX_NUM=max(MAX_NUM,dp[i]);
+        }
+        return MAX_NUM;
+    }
+};
+
+//压缩空间的dp
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        if(nums.empty())
+          return 0;
+        vector<int>dp(nums.size());
+        int sum=nums[0];
+        int MAX_SUM=nums[0];
+        for(int i=1;i<nums.size();i++){
+            if(sum<0)
+               sum=nums[i];
+            else
+               sum+=nums[i];
+            MAX_SUM=max(MAX_SUM,sum);
+        }
+        return MAX_SUM;
+    }
+};
