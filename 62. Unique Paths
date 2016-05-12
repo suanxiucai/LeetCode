@@ -1,0 +1,20 @@
+//这是压缩之后的算法   原始的dp二维矩阵 除了第一行第一列全为1 其他f(i,j)=f(i-1,j)+f(i,j-1)
+class Solution {
+public:
+	int uniquePaths(int m, int n) {
+		vector<int>dp(n);
+		if (m<0 || n<0)
+			return 0;
+		if (m == 1 || n == 1)
+			return 1;
+		for (int i = 0; i<n; i++)
+			dp[i] = 1;
+		for (int i = 1; i<m; i++) {
+			for (int j = 1; j < n; j++) {
+				dp[0] = 1;
+				dp[j] = dp[j - 1] + dp[j];
+			}
+		}
+		return dp[n - 1];
+	}
+};
