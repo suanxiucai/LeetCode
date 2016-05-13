@@ -1,0 +1,29 @@
+//由于首尾连成了环首尾元素不可兼得 所以分为两步  第一步将第一个元素去掉求最大值  
+//第二步将最后一个元素去掉求最大值  然后求两个结果中的最大值
+int rob(vector<int>& nums) {
+	if (nums.empty())
+		return 0;
+	if (nums.size() == 1)
+		return nums[0];
+	if (nums.size() == 2)
+		return max(nums[0], nums[1]);
+	vector<int>Temp;
+	Temp.insert(Temp.end(), nums.begin() + 1, nums.end());//去掉第一个元素
+	vector<int>dp(Temp.size());
+	dp[0] = Temp[0];
+	dp[1] = max(Temp[0], Temp[1]);
+	for (int i = 2; i<Temp.size(); i++) {
+		dp[i] = max(dp[i - 2] + Temp[i], dp[i - 1]);//注意这个dp关系式！！！！！！！！
+	}
+	int MAX1 = *max_element(dp.begin(), dp.end());
+
+	vector<int>().swap(Temp);
+	Temp.insert(Temp.end(), nums.begin(), nums.end()-1);//去掉最后一个元素
+	dp[0] = Temp[0];
+	dp[1] = max(Temp[0], Temp[1]);
+	for (int i = 2; i<Temp.size(); i++) {
+		dp[i] = max(dp[i - 2] + Temp[i], dp[i - 1]);//注意这个dp关系式！！！！！！！！
+	}
+	int MAX2 = *max_element(dp.begin(), dp.end());
+	return max(MAX1, MAX2);
+}
