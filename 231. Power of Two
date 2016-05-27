@@ -1,0 +1,16 @@
+//2的指数  就是最前面是1 后面全是0   因此统计1的个数为1即可
+class Solution {
+public:
+    bool isPowerOfTwo(int n) {
+        if(n<=0)  return false;
+        bool res=false;
+        int countOf1=0;
+        while(n){
+            if(n&1)  countOf1++;
+            n>>=1;
+        }
+        if(countOf1==1) 
+            res=true;
+        return res;
+    }
+};
