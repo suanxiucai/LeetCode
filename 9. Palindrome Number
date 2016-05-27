@@ -1,0 +1,24 @@
+class Solution {
+public:
+    bool isPalindrome(int x) {
+       if(x<0)  return false;
+       int count=0;
+       int Temp=x;
+       int b=0;
+       int res=0;
+       while(Temp){
+           Temp/=10;
+           ++count;
+       }//count是x的位数
+       b=pow(10,count-1);//b是x最高位的基数
+       Temp=x;
+       while(Temp){
+           int i=Temp%10;//x的最低位
+           res+=i*b;
+           b/=10;
+           Temp/=10;
+       }
+       return res==x;
+       
+    }
+};
