@@ -1,0 +1,23 @@
+//思路1：对每一个数用n&(n-1)的方式计数，看有几个1
+//思路2：观察规律 如果i为偶数 dp[i]=dp[i/2];   i为奇数 dp[i]=dp[i/2]+1;
+//思路3：对每个数二进制有几个数进行分类 例如[0-1]范围对应的结果是[0 1];[2-3]对应的结果是[1 2]是[0-1]结果的加1；[4-7]范围对应的结果是[1 2 //3] 是[0-3]范围的结果[0 1 1 2]加1；最后只返回结果的num+1项，本题用的是思路3
+
+class Solution {
+public:
+    vector<int> countBits(int num) {
+        vector<int>Temp;
+        Temp.push_back(0);
+        Temp.push_back(1);
+        vector<int>res=Temp;
+        int count=2;
+        while(count<num+1){
+            for(auto &i:Temp)//把当前结果每一项都加1
+               i+=1;
+            res.insert(res.end(),Temp.begin(),Temp.end());//追加在res后面
+            Temp=res;//更新
+            count*=2;
+        }
+        res.erase(res.begin()+num+1,res.end());//只返回num+1项
+        return res;
+    }
+};
