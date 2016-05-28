@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int computeArea(int A, int B, int C, int D, int E, int F, int G, int H) {
+        int x_left=max(A,E);
+        int x_right=min(C,G);
+        int y_left=max(B,F);
+        int y_right=min(D,H);
+        int area_common = 0;
+		if((x_right > x_left) && (y_right > y_left))//计算公共部分的面积，注意测试是：x_right > x_left；而不是x_right- x_left>0、、                                                //;这样如果x_left是个很小的负数，x_right是个很大的正数时会发生溢出。
+			area_common=(x_right - x_left)*(y_right - y_left);
+        
+        int area1=(C-A)*(D-B);
+        area1=(area1>0)?area1:0;
+        
+        int area2=(G-E)*(H-F);
+        area2=(area2>0)?area2:0;
+        
+        int res=area1+area2-area_common;
+        return (res>=0)?res:0;
+    }
+};
