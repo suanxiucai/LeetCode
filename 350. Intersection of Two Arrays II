@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<int> intersect(vector<int>& nums1, vector<int>& nums2) {
+        map<int,int>count;
+        vector<int>numsA=(nums1.size()<=nums2.size())?nums1:nums2;//为了使下面的find函数尽量在小的规模中寻找
+        vector<int>numsB=(nums1.size()<=nums2.size())?nums2:nums1;
+        vector<int>res;
+        
+        if(nums1.empty() || nums2.empty())   return res;
+        for(auto i:numsA){
+            count[i]++;
+        }
+        for(auto i:numsB){
+            map<int,int>::iterator temp=count.find(i);
+            if(temp!=count.end() && temp->second>0){
+                 res.push_back(i);
+                 --temp->second;
+            }
+        }
+        return res;
+    }
+};
+
