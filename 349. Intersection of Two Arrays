@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> intersection(vector<int>& nums1, vector<int>& nums2) {
+        map<int,int>count;
+        vector<int>res;
+        if(nums1.empty() || nums2.empty())   return res;
+        for(auto i:nums1){
+            count[i]=1;//需要计数
+        }
+        for(auto i:nums2){
+            map<int,int>::iterator temp=count.find(i);
+            if(temp!=count.end() && temp->second==1){//防止[1],[1,1]的情况中1被统计两次 所以要--temp->second
+                 res.push_back(i);
+                 --temp->second;
+            }
+               
+        }
+        return res;
+    }
+};
