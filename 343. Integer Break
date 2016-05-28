@@ -1,4 +1,5 @@
-//观察就能知道拆出足够多的 3 就能使得乘积最大   http://blog.csdn.net/liyuanbhu/article/details/51198124
+//思路1观察就能知道拆出足够多的 3 就能使得乘积最大   http://blog.csdn.net/liyuanbhu/article/details/51198124
+//思路2  用dp  dp[x] = max(3 * dp[x - 3], 2 * dp[x - 2])   http://www.tuicool.com/articles/rIVzaey
 class Solution {
 public:
     int integerBreak(int n) {
