@@ -1,0 +1,53 @@
+
+/*1， 罗马数字共有7个，即I（1）、V（5）、X（10）、L（50）、C（100）、D（500）和M（1000）。
+
+罗马数字中没有“0”。
+
+2， 重复次数：一个罗马数字最多重复3次。
+
+3， 右加左减：
+
+在较大的罗马数字的右边记上较小的罗马数字，表示大数字加小数字。
+
+在较大的罗马数字的左边记上较小的罗马数字，表示大数字减小数字。
+
+4， 左减的数字有限制，仅限于I、X、C，且放在大数的左边只能用一个。
+
+(*) V 和 X 左边的小数字只能用Ⅰ。
+
+(*) L 和 C 左边的小数字只能用X。
+
+(*) D 和 M 左 边的小数字只能用C。*/
+/*把可能的情况都列举出来 然后从最大值1000开始逐个的测试。注意，map是有序的，因此排在最前面的是(1,"I")。因此要用到反向迭代器*/
+class Solution {
+public:
+    string intToRoman(int num) {
+        map<int,string>count;
+        count.insert(make_pair(1000, "M"));
+        count.insert(make_pair(900, "CM"));
+        count.insert(make_pair(500, "D"));
+        count.insert(make_pair(400, "CD"));
+        count.insert(make_pair(100, "C"));
+        count.insert(make_pair(90, "XC"));
+        count.insert(make_pair(50, "L"));
+        count.insert(make_pair(40, "XL"));
+        count.insert(make_pair(10, "X"));
+        count.insert(make_pair(9, "IX"));
+        count.insert(make_pair(5, "V"));
+        count.insert(make_pair(4, "IV"));
+        count.insert(make_pair(1, "I"));
+       
+        string res;
+        for(auto i=count.rbegin();i!=count.rend();){//反向迭代器 重要
+			int temp=num/i->first;
+            if(temp){
+                for(int j=0;j<temp;j++)
+					res+=i->second;
+                num-=temp*i->first;
+            }
+            else
+                i++;
+        }
+        return res;
+    }
+};
